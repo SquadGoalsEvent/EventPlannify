@@ -12,14 +12,13 @@ EMAIL_PASSWORD = "Losiwe@1"
 SMTP_SERVER = "smtp.office365.com"
 SMTP_PORT = 587
 
-# Function to generate unique access link
-def generate_access_link(guest_name):
-    return f"http://localhost:8080/guest/{uuid.uuid4()}"
+# Function to generate unique password
+def generate_password():
+    return str(uuid.uuid4())
 
 # Function to send email invitation
-def send_invitation(guest_name, guest_email):
-    access_link = generate_access_link(guest_name)
-    msg = MIMEText(f"Dear {guest_name},\n\nYou're invited to our event! Please click this link to RSVP: {access_link}\n\nBest regards, [Your Name]")
+def send_invitation(guest_name, guest_email, password):
+    msg = MIMEText(f"Dear {guest_name},\n\nYou're invited to our event! Your password is: {password}\n\nBest regards, [Your Name]")
     msg['Subject'] = "Event Invitation"
     msg['From'] = EMAIL_USERNAME
     msg['To'] = guest_email
@@ -45,12 +44,11 @@ def validate_name(name):
     pattern = r"^[a-zA-Z\s]+$"
     return re.match(pattern, name)
 
-# Function to add guest to list and send invitation
+# Function to add guest to list and send invitation 
 def add_guest():
     guest_name = name_entry.get()
     guest_email = email_entry.get()
     guest_cellphone = cellphone_entry.get()
-   
 
     if not validate_name(guest_name):
         messagebox.showerror("Error", "Invalid name.")
@@ -65,46 +63,52 @@ def add_guest():
         return
 
     if guest_name and guest_email and guest_cellphone:
+        password = generate_password()
+
         # Add guest to text file
-        with open("guest.txt", "a") as file:
-            file.write(f"{guest_name},{guest_email},{guest_cellphone}\n")
+        with open("guestlist.txt", "a") as file:
+            file.write(f"{guest_name},{guest_email},{guest_cellphone},{password}\n")
 
         # Send email invitation
-        send_invitation(guest_name, guest_email)
+        send_invitation(guest_name, guest_email, password)
+
         messagebox.showinfo("Success", "Guest added and invitation sent!")
         name_entry.delete(0, tk.END)
         email_entry.delete(0, tk.END)
         cellphone_entry.delete(0, tk.END)
     else:
         messagebox.showerror("Error", "Please fill in all fields.")
-        
-        
-    
 
 # Function to view guest list
 def view_guests():
     tree.delete(*tree.get_children())
+
     try:
-        with open("guest.txt", "r") as file:
+        with open("guestlist.txt", "r") as file:
             guests = file.readlines()
-            for guest in guests:
-                name, email, cellphone = guest.strip().split(",")
-                tree.insert("", tk.END, values=(name, email, cellphone))
+
+        for guest in guests:
+            name, email, cellphone, _ = guest.strip().split(",")
+            tree.insert("", tk.END, values=(name, email, cellphone))
     except FileNotFoundError:
         messagebox.showerror("Error", "No guests added yet.")
 
 # Function to delete selected guest
 def delete_guest():
     selected = tree.focus()
+
     if selected:
         tree.delete(selected)
-        with open("guest.txt", "r") as file:
+
+        with open("guestlist.txt", "r") as file:
             guests = file.readlines()
-        with open("guest.txt", "w") as file:
+
+        with open("guestlist.txt", "w") as file:
             for guest in guests:
-                name, email, cellphone = guest.strip().split(",")
+                name, email, cellphone, _ = guest.strip().split(",")
                 if name != tree.item(selected, "values")[0]:
                     file.write(guest)
+
         messagebox.showinfo("Success", "Guest deleted.")
     else:
         messagebox.showerror("Error", "Please select a guest.")
@@ -112,10 +116,12 @@ def delete_guest():
 # Function to update selected guest
 def update_guest():
     selected = tree.focus()
+
     if selected:
         name = tree.item(selected, "values")[0]
         email = tree.item(selected, "values")[1]
         cellphone = tree.item(selected, "values")[2]
+
         update_window = tk.Toplevel()
         update_window.title("Update Guest")
 
@@ -154,15 +160,17 @@ def update_guest():
                 messagebox.showerror("Error", "Invalid cellphone number.")
                 return
 
-            with open("guest.txt", "r") as file:
+            with open("guestlist.txt", "r") as file:
                 guests = file.readlines()
-            with open("guest.txt", "w") as file:
+
+            with open("guestlist.txt", "w") as file:
                 for guest in guests:
-                    guest_name, guest_email, guest_cellphone = guest.strip().split(",")
+                    guest_name, guest_email, guest_cellphone, password = guest.strip().split(",")
                     if guest_name == name:
-                        file.write(f"{new_name},{new_email},{new_cellphone}\n")
+                        file.write(f"{new_name},{new_email},{new_cellphone},{password}\n")
                     else:
                         file.write(guest)
+
             tree.item(selected, values=(new_name, new_email, new_cellphone))
             update_window.destroy()
             messagebox.showinfo("Success", "Guest updated.")
@@ -172,10 +180,49 @@ def update_guest():
     else:
         messagebox.showerror("Error", "Please select a guest.")
 
-  # Clear input fields
-    name_entry.delete(0, tk.END)
-    email_entry.delete(0, tk.END)
-    cellphone_entry.delete(0, tk.END)
+# Function to RSVP
+def rsvp():
+    rsvp_window = tk.Toplevel()
+    rsvp_window.title("RSVP")
+
+    name_label = tk.Label(rsvp_window, text="Name:")
+    name_label.pack()
+    name_entry = tk.Entry(rsvp_window)
+    name_entry.pack()
+
+    email_label = tk.Label(rsvp_window, text="Email:")
+    email_label.pack()
+    email_entry = tk.Entry(rsvp_window)
+    email_entry.pack()
+
+    password_label = tk.Label(rsvp_window, text="Password:")
+    password_label.pack()
+    password_entry = tk.Entry(rsvp_window, show="")
+    password_entry.pack()
+
+    def submit_rsvp():
+        name = name_entry.get()
+        email = email_entry.get()
+        password = password_entry.get()
+
+        with open("guest.txt", "r") as file:
+            guests = file.readlines()
+
+        for guest in guests:
+            guest_name, guest_email, _, guest_password = guest.strip().split(",")
+
+            if guest_name == name and guest_email == email and guest_password == password:
+                # RSVP successful
+                with open("rsvp.txt", "a") as rsvp_file:
+                    rsvp_file.write(f"{name},{email}\n")
+                messagebox.showinfo("Success", "RSVP successful!")
+                rsvp_window.destroy()
+                return
+
+        messagebox.showerror("Error", "Invalid credentials.")
+
+    submit_button = tk.Button(rsvp_window, text="Submit RSVP", command=submit_rsvp)
+    submit_button.pack()
 
 # Create GUI
 root = tk.Tk()
@@ -208,19 +255,20 @@ delete_button.pack()
 update_button = tk.Button(root, text="Update Guest", command=update_guest)
 update_button.pack()
 
+rsvp_button = tk.Button(root, text="RSVP", command=rsvp)
+rsvp_button.pack()
+
 tree = ttk.Treeview(root)
 tree['columns'] = ('Name', 'Email', 'Cellphone')
 tree.column("#0", width=0, )
 tree.column("Name", anchor=tk.W, width=100)
-tree.column("Email", anchor=tk.W, width=150)
-tree.column("Cellphone", anchor=tk.W, width=100)
-tree.heading("#0", text='', anchor=tk.W)
-tree.heading("Name", text='Name', anchor=tk.W)
-tree.heading("Email", text='Email', anchor=tk.W)
+tree.column("Email", anchor=tk.W, width=150) 
+tree.column("Cellphone", anchor=tk.W, width=100) 
+tree.heading("#0", text='', anchor=tk.W) 
+tree.heading("Name", text='Name', anchor=tk.W) 
+tree.heading("Email", text='Email', anchor=tk.W) 
 tree.heading("Cellphone", text='Cellphone', anchor=tk.W)
 tree.pack()
-
-#adding a scroller
 
 root.mainloop()
 
