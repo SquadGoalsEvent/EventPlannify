@@ -201,25 +201,48 @@ def rsvp():
     password_entry.pack()
 
     def submit_rsvp():
-        name = name_entry.get()
-        email = email_entry.get()
-        password = password_entry.get()
+       name = name_entry.get().strip()
+       email = email_entry.get().strip()
+       password = password_entry.get().strip()
 
-        with open("guest.txt", "r") as file:
+       
+
+       if not name or not email or not password:
+          messagebox.showerror("Error", "Please fill in all fields.")
+          return
+
+       try:
+           with open("guestlist.txt", "r") as file:
             guests = file.readlines()
 
-        for guest in guests:
-            guest_name, guest_email, _, guest_password = guest.strip().split(",")
+           for guest in guests:
+               
+               guest_info = guest.strip().split(",")
 
-            if guest_name == name and guest_email == email and guest_password == password:
+               if len(guest_info) < 4:
+
+                messagebox.showerror("Error", "Invalid guest information.")
+                continue
+
+               guest_name, guest_email, _, guest_password = guest_info
+
+               if  guest_name == name and guest_email == email and guest_password == password:
                 # RSVP successful
                 with open("rsvp.txt", "a") as rsvp_file:
                     rsvp_file.write(f"{name},{email}\n")
                 messagebox.showinfo("Success", "RSVP successful!")
                 rsvp_window.destroy()
-                return
+                break  # Add this line
+           else:
+                  messagebox.showerror("Error", "Invalid credentials.") 
 
-        messagebox.showerror("Error", "Invalid credentials.")
+
+       except FileNotFoundError:
+        messagebox.showerror("Error", "Guest list file not found.")
+       except Exception as e:
+        messagebox.showerror("Error", str(e))
+
+
 
     submit_button = tk.Button(rsvp_window, text="Submit RSVP", command=submit_rsvp)
     submit_button.pack()
