@@ -6,6 +6,7 @@ from tkinter import messagebox, ttk
 import uuid
 import re
 
+
 # Email configuration
 EMAIL_USERNAME = "zimkhitha.nongomaza@capaciti.org.za"
 EMAIL_PASSWORD = "Losiwe@1"
@@ -16,9 +17,14 @@ SMTP_PORT = 587
 def generate_password():
     return str(uuid.uuid4())
 
+# Function to generate unique access link
+def generate_access_link(guest_name):
+    return f"http://localhost:8080/guest/{uuid.uuid4()}"
+
 # Function to send email invitation
 def send_invitation(guest_name, guest_email, password):
-    msg = MIMEText(f"Dear {guest_name},\n\nYou're invited to our event! Your password is: {password}\n\nBest regards, [Your Name]")
+    access_link = generate_access_link(guest_name)
+    msg = MIMEText(f"Dear {guest_name},\n\nYou're invited to our event! Your password is:\n {password} \n\n Click onn the link to RSVP {access_link} \n\nBest regards,\n Zimi Nongomaza") 
     msg['Subject'] = "Event Invitation"
     msg['From'] = EMAIL_USERNAME
     msg['To'] = guest_email
@@ -232,7 +238,7 @@ def rsvp():
                     rsvp_file.write(f"{name},{email}\n")
                 messagebox.showinfo("Success", "RSVP successful!")
                 rsvp_window.destroy()
-                break  # Add this line
+                break 
            else:
                   messagebox.showerror("Error", "Invalid credentials.") 
 
