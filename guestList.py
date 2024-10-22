@@ -88,6 +88,17 @@ def view_guests():
   except FileNotFoundError:
       messagebox.showerror("Error", "No guests added yet.")
 
+def view_rsvp():
+  tree.delete(*tree.get_children())
+  try:
+      with open("rsvp.txt", "r") as file:
+          rsvps = file.readlines()
+      for rsvp in rsvps:
+          name, email = rsvp.strip().split(",")
+          tree.insert("", tk.END, values=(name, email))
+  except FileNotFoundError:
+      messagebox.showerror("Error", "No guests added yet.")
+
 # Function to delete selected guest
 def delete_guest():
   selected = tree.focus()
@@ -275,6 +286,9 @@ update_button.pack(side="left", fill="x", expand=True)
 
 rsvp_button = tk.Button(button_frame, text="RSVP", command=rsvp, bg=accent_color, fg=text_color)
 rsvp_button.pack(side="left", fill="x", expand=True)
+
+view_button = tk.Button(button_frame, text="View RSVPS", command=view_rsvp, bg=accent_color, fg=text_color) 
+view_button.pack(side="left", fill="x", expand=True)
 
 # Create tree frame widget
 tree = ttk.Treeview(tree_frame)
