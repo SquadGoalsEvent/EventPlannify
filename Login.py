@@ -116,11 +116,9 @@ class SplashScreen:
         self.canvas.place(x = 0, y = 0 , relwidth = 1, relheight = 1)
 
         self.canvas.create_image(0,0, anchor = 'nw', image = self.tk_img)
-        self.canvas.create_text(700, 300, text = "Welcome to EventPlannify", fill = "#000000", font = ('Microsoft YaHei UI Light',48, 'bold'), anchor = 'center')
-      
-
         
-        self.canvas.create_text(700, 400, text = "Crafting Experiences 1 Event At A Time", fill = "white", font = ('Microsoft YaHei UI Light', 18, 'italic'), anchor = 'center')
+        self.create_text_with_shadow(700, 300, "Welcome to EventPlannify", "#888888", "#000000", 48, 'bold')
+        self.create_text_with_shadow(700, 400, "Crafting Experiences 1 Event At A Time", "#888888", "white", 28, 'italic')
 
         style = ttk.Style()
         style.theme_use('default')
@@ -133,7 +131,7 @@ class SplashScreen:
   def create_text_with_shadow(self, x, y, text, shadow_color, text_color, font_size, font_weight):
         """Creates text with a shadow effect."""
         # Create shadow text (slightly offset)
-        self.canvas.create_text(x + 2, y + 2, text=text, fill=shadow_color, font=('Microsoft YaHei UI Light', font_size, font_weight), anchor='center')
+        self.canvas.create_text(x + 3, y + 3, text=text, fill=shadow_color, font=('Microsoft YaHei UI Light', font_size, font_weight), anchor='center')
         # Create main text
         self.canvas.create_text(x, y, text=text, fill=text_color, font=('Microsoft YaHei UI Light', font_size, font_weight), anchor='center')
   def hide_splash(self):
@@ -380,10 +378,8 @@ class App:
         confirm_password = self.confirm_password.get()
         normalized_email = self.normalize_email(email)
         
-        if normalized_email is None:
-           self.hide_loading_spinner()
-           self.enable_buttons()
-           return
+        
+        
 
         if not email or '@' not in email:
             messagebox.showerror("Error", "Please enter a valid email address!")
@@ -391,9 +387,7 @@ class App:
             self.enable_buttons()
             return
         
-        normalized_email = self.normalize_email(email)
-        self.hide_loading_spinner()
-        self.enable_buttons()
+        
 
         if not email or not username or not password or not confirm_password:
             messagebox.showerror("Error", "All fields are requried!")
@@ -429,6 +423,10 @@ class App:
         
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         self.save_user_data(username, email, hashed_password)
+        
+        self.hide_loading_spinner()
+        self.enable_buttons()
+        
         self.progress_and_email(email, "registration", password = password)
     
     def email_registered(self, email):
@@ -438,7 +436,7 @@ class App:
             user = user.strip()  
             if user:  # Check if the line is not empty
                 try:
-                    saved_email, _ = user.split(',')  
+                    saved_email, _, _ = user.split(',')  
                     if saved_email == email:
                         return True
                 except ValueError:
@@ -459,36 +457,46 @@ class App:
     # Check if the email is registered
      if not self.email_registered(email):
         messagebox.showerror("Error", "Email not registered! Please sign up.")
+        self.hide_loading_spinner()
+        self.enable_buttons()
         return
-
+    
     # Ensure password field is not empty
      if not password:
         messagebox.showerror("Error", "Missing Fields")
+        self.hide_loading_spinner()
+        self.enable_buttons()
         return
 
     # Open and read the stored user data
+    
      with open('datasheet.txt', 'r') as file:
         users = file.readlines()
         for user in users:
             # Each line should contain email and hashed password separated by a comma
             try:
-                saved_email, saved_hashed_password = user.strip().split(',')
+                saved_email, saved_username, saved_hashed_password = user.strip().split(',')
                 
                 # Check if the email matches
                 if saved_email == email:
                     # Validate the password using bcrypt
                     if bcrypt.checkpw(password.encode('utf-8'), saved_hashed_password.encode('utf-8')):
-                        messagebox.showinfo("Success", "Login successful!")
+                        messagebox.showinfo("Success", f"Welcome {saved_username}! Login successful!")
+                        self.hide_loading_spinner()
+                        self.enable_buttons()
                         return
                     else:
                         messagebox.showerror("Error", "Incorrect Password! Please try again.")
+                        self.hide_loading_spinner()
+                        self.enable_buttons()
+                        
                         return
             except ValueError:
                 print(f"Error processing line: {user}")
 
     # If no matching email is found
     messagebox.showerror("Error", "Invalid credentials!")
-
+    
    
     # Forgot password
     def send_reset_token(self):
