@@ -68,7 +68,7 @@ def display_events():
     for widget in main_content.winfo_children():
         widget.destroy()
 
-    overlay_frame = load_background(main_content, "EventPlannify/pexels-designecologist-2526105.png")
+    overlay_frame = load_background(main_content, "pexels-designecologist-2526105.png")
     if overlay_frame is None:
         return
 
@@ -333,7 +333,7 @@ welcome_label = tk.Label(sidebar_frame, text="Welcome, [User's Name]", bg="#8000
 welcome_label.pack(pady=15) 
 
 # Load profile icon
-img = Image.open("EventPlannify/user.png ")
+img = Image.open("user.png ")
 resized_img = img.resize((50, 50), Image.LANCZOS)
 photo_img = ImageTk.PhotoImage(resized_img)
 root.profile_icon = photo_img
@@ -343,19 +343,19 @@ profile_icon_label.pack(pady=20)
 
 # Load icons for buttons
 # Load icons for buttons
-create_events_icon = Image.open("EventPlannify/calendar (1).png")
+create_events_icon = Image.open("calendar (1).png")
 create_events_icon = create_events_icon.resize((20, 20), Image.LANCZOS)
 create_events_photo = ImageTk.PhotoImage(create_events_icon)
 
-guest_list_icon = Image.open("EventPlannify/guest-list.png")
+guest_list_icon = Image.open("guest-list.png")
 guest_list_icon = guest_list_icon.resize((20, 20), Image.LANCZOS)
 guest_list_photo = ImageTk.PhotoImage(guest_list_icon)
 
-view_guest_icon = Image.open("EventPlannify/target-audience.png")
+view_guest_icon = Image.open("target-audience.png")
 view_guest_icon = view_guest_icon.resize((20, 20), Image.LANCZOS)
 view_guest_photo = ImageTk.PhotoImage(view_guest_icon)
 
-settings_icon = Image.open("EventPlannify/cog.png")
+settings_icon = Image.open("cog.png")
 settings_icon = settings_icon.resize((20, 20), Image.LANCZOS)
 setting_photo = ImageTk.PhotoImage(view_guest_icon)
 
