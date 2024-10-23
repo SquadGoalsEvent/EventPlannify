@@ -114,11 +114,11 @@ class SplashScreen:
 
         self.canvas = Canvas(master, width = 1400, height = 800, bg = "white", highlightthickness=0)
         self.canvas.place(x = 0, y = 0 , relwidth = 1, relheight = 1)
-
+        self.canvas.create_rectangle(0,0,1400,800, fill = 'black', stipple = 'gray50')
         self.canvas.create_image(0,0, anchor = 'nw', image = self.tk_img)
         
-        self.create_text_with_shadow(700, 300, "Welcome to EventPlannify", "#888888", "#000000", 48, 'bold')
-        self.create_text_with_shadow(700, 400, "Crafting Experiences 1 Event At A Time", "#888888", "white", 28, 'italic')
+        self.create_text_with_outline(700, 300, "Welcome to EventPlannify", "#888888", "#000000", 48, 'bold')
+        self.create_text_with_outline(700, 400, "Crafting Experiences 1 Event At A Time", "#888888", "white", 28, 'italic')
 
         style = ttk.Style()
         style.theme_use('default')
@@ -128,12 +128,13 @@ class SplashScreen:
         self.progress_bar.start()
 
         self.master.after(6000, self.hide_splash)
-  def create_text_with_shadow(self, x, y, text, shadow_color, text_color, font_size, font_weight):
-        """Creates text with a shadow effect."""
-        # Create shadow text (slightly offset)
-        self.canvas.create_text(x + 3, y + 3, text=text, fill=shadow_color, font=('Microsoft YaHei UI Light', font_size, font_weight), anchor='center')
-        # Create main text
-        self.canvas.create_text(x, y, text=text, fill=text_color, font=('Microsoft YaHei UI Light', font_size, font_weight), anchor='center')
+    
+  def create_text_with_outline(self, x, y, text, outline_color, text_color, font_size, font_weight):
+      for offset in range(-1, 2):
+          for offset2 in range(-1, 2):
+              self.canvas.create_text(x + offset, y + offset2, text=text, fill = outline_color, font = ('Microsoft YaHei UI Light', font_size, font_weight), anchor = 'center' )
+              self.canvas.create_text(x, y, text = text, fill = text_color, font = ('Microsoft YaHei UI Light', font_size, font_weight), anchor = 'center')
+  
   def hide_splash(self):
     self.progress_bar.stop()
     self.master.destroy()
@@ -334,6 +335,15 @@ class App:
              self.password_entry.config(fg = 'green')
     
     
+    def validate_username(self, event = None):
+        username = self.username.get()
+        if not username.isalnum():
+            self.username_entry.config(bg = 'red')
+        elif self.username_registered(username):
+            self.username_entry.config(bg = 'yellow')
+        else:
+            self.username_entry.config(bg = 'green')
+
     def evaluate_password_strength(self, password):
         criteria = []
         if len(password) < 8:
@@ -369,6 +379,8 @@ class App:
                 button.config(state = NORMAL)
 
     # Signup function
+    
+    
     def signup(self):
         self.disable_buttons()
         self.show_loading_spinner()
@@ -397,7 +409,13 @@ class App:
 
         if not username.isalnum():
             messagebox.showerror("Error", "Username must be alphanumeric (letters & numbers)")
-            self.hide_loading_spinner
+            self.hide_loading_spinner()
+            self.enable_buttons()
+            return
+        
+        if self.username_registered(username):
+            messagebox.showerror("Error", "Username already registered!")
+            self.hide_loading_spinner()
             self.enable_buttons()
             return
  
@@ -408,6 +426,8 @@ class App:
             self.enable_buttons()
             return
         
+        password = password.strip()
+        confirm_password = confirm_password.strip()
         if password != confirm_password:
             messagebox.showerror("Error", "Passwords do not match!")
             self.hide_loading_spinner()
@@ -429,6 +449,21 @@ class App:
         
         self.progress_and_email(email, "registration", password = password)
     
+    def username_registered(self, username):
+        """Check if the username is already registered."""
+        with open('datasheet.txt', 'r') as file:
+            users = file.readlines()
+            for user in users:
+                user = user.strip()  
+                if user:  # Check if the line is not empty
+                    try:
+                        saved_username, _, _ = user.split(',')
+                        if saved_username == username:
+                            return True
+                    except ValueError:
+                        print(f"Skipping invalid line: {user}")  
+        return False
+
     def email_registered(self, email):
      with open('datasheet.txt', 'r') as file:
         users = file.readlines()
@@ -485,6 +520,7 @@ class App:
                         self.hide_loading_spinner()
                         self.enable_buttons()
                         return
+                        
                     else:
                         messagebox.showerror("Error", "Incorrect Password! Please try again.")
                         self.hide_loading_spinner()
@@ -493,9 +529,14 @@ class App:
                         return
             except ValueError:
                 print(f"Error processing line: {user}")
-
+     self.master.destroy()
+     root = Tk()
+     app = EventApp(root)
+     root.mainloop()
     # If no matching email is found
     messagebox.showerror("Error", "Invalid credentials!")
+
+    
     
    
     # Forgot password
