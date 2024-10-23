@@ -15,7 +15,8 @@ import requests
 
 EVENTS_FILE = 'events.txt'
 
-def __init__(self, root):
+class Event:
+    def __init__(self, root):
         self.root = root
         self.root.title("Event Manager")
         self.root.geometry("1500x800")
@@ -46,13 +47,21 @@ def load_background(main_content, image_path):
 def logout():
     response = messagebox.askyesno("Logout", "Are you sure you want to logout?", font=('Microsoft YaHei UI Light', 20))
     if response:
-        root.quit()
+        show_signin()
 
-def login():
-    # Read the username from the text file
-    with open('EventPlannify/datasheet.txt', 'r') as file:
-        username = file.readline().strip()  
-        welcome_label.config(text=f"Welcome, {username}")    
+def signin(username, password):
+    # Add your login logic here
+     with open('EventPlannify/datasheet.txt', 'r') as file:
+            username = file.readline().strip()  
+        # if username and password:  # Simplified check
+            welcome_label.config(text=f"Welcome, {username}")
+        # display_events()  
+
+# def signin():
+#     # Read the username from the text file
+#     with open('EventPlannify/datasheet.txt', 'r') as file:
+#         username = file.readline().strip()  
+#         welcome_label.config(text=f"Welcome, {username}")    
 
 
 def load_events():
@@ -390,6 +399,6 @@ main_content.place(relx=0.25, rely=0.1, relwidth=0.85, relheight=0.9)
 
 
 display_events()
-login()
-
+signin()
+app = Event(root)
 root.mainloop()
