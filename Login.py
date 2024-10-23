@@ -103,7 +103,7 @@ class SplashScreen:
         self.master.geometry('1400x800')
         self.master.resizable(True, True)
 
-        img_path = r'C:\Users\Yandisa\OneDrive - Cape IT Initiative\Documents\GitHub\SquadGoals\sign up\free-photo-of-thrilling-amusement-park-ride-at-twilight.jpeg'
+        img_path = r'free-photo-of-thrilling-amusement-park-ride-at-twilight.jpeg'
         if os.path.exists(img_path):
                     print("Image found.")
         img = Image.open(img_path)
@@ -165,7 +165,7 @@ class App:
    
     
         try:
-            img_path = r'C:\Users\Yandisa\OneDrive - Cape IT Initiative\Documents\GitHub\SquadGoals\sign up\pexels-photo-1190297.png'
+            img_path = r'pexels-photo-1190297.png'
             if os.path.exists(img_path):
                     print("Image found.")
             img = Image.open(img_path)
@@ -260,9 +260,10 @@ class App:
         heading.place(relx=0.5, y=20, anchor='n')
 
         self.email = create_entry(self.frame, 'Email Address', 100)
-        self.password = create_entry(self.frame, 'Password', 180)
-        self.confirm_password = create_entry(self.frame, 'Confirm Password', 260)
-        self.strength_label = Label(self.frame, text="", fg='white', bg='black', font=('Microsoft YaHei UI Light', 20))
+        self.username = create_entry(self.frame, 'Username', 180)
+        self.password = create_entry(self.frame, 'Password', 240)
+        self.confirm_password = create_entry(self.frame, 'Confirm Password', 320)
+        self.strength_label = Label(self.frame, text="", fg='white', bg='black', font=('Microsoft YaHei UI Light', 10))
         self.strength_label.place(x=30, y=220)
 
         self.password_entry = self.password 
@@ -374,6 +375,7 @@ class App:
         self.disable_buttons()
         self.show_loading_spinner()
         email = self.email.get()
+        username = self.username.get()
         password = self.password.get()
         confirm_password = self.confirm_password.get()
         normalized_email = self.normalize_email(email)
@@ -393,31 +395,44 @@ class App:
         self.hide_loading_spinner()
         self.enable_buttons()
 
-        if not email or not password or not confirm_password:
+        if not email or not username or not password or not confirm_password:
             messagebox.showerror("Error", "All fields are requried!")
+            self.hide_loading_spinner()
+            self.enable_buttons()
+            return
+
+        if not username.isalnum():
+            messagebox.showerror("Error", "Username must be alphanumeric (letters & numbers)")
+            self.hide_loading_spinner
+            self.enable_buttons()
             return
  
 
         if self.email_registered(normalized_email):
             messagebox.showerror("Error", "Email already registered!")
+            self.hide_loading_spinner()
+            self.enable_buttons()
             return
         
         if password != confirm_password:
             messagebox.showerror("Error", "Passwords do not match!")
+            self.hide_loading_spinner()
+            self.enable_buttons()
             return
 
         strength, color = self.evaluate_password_strength(password)
         if strength.startswith("Weak"):
             messagebox.showerror("Error", "Password is not strong enough!")
-
+            self.hide_loading_spinner()
+            self.enable_buttons()
             return 
         
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        self.save_user_data(email, hashed_password)
+        self.save_user_data(username, email, hashed_password)
         self.progress_and_email(email, "registration", password = password)
     
     def email_registered(self, email):
-     with open('C:\\Users\\Yandisa\\OneDrive - Cape IT Initiative\\Documents\\GitHub\\SquadGoals\\sign up\\datasheet.txt', 'r') as file:
+     with open('datasheet.txt', 'r') as file:
         users = file.readlines()
         for user in users:
             user = user.strip()  
@@ -430,9 +445,9 @@ class App:
                     print(f"Skipping invalid line: {user}")  
      return False
     # Save user data
-    def save_user_data(self,normalized_email, hashed_password):
-        with open('C:\\Users\\Yandisa\\OneDrive - Cape IT Initiative\\Documents\\GitHub\\SquadGoals\\sign up\\datasheet.txt', 'a') as file:
-            file.write(f"{normalized_email},{hashed_password.decode('utf-8')}\n")
+    def save_user_data(self, username, normalized_email, hashed_password):
+        with open('datasheet.txt', 'a') as file:
+            file.write(f"{normalized_email},{username},{hashed_password.decode('utf-8')}\n")
     
     
     # Signin function
@@ -452,7 +467,7 @@ class App:
         return
 
     # Open and read the stored user data
-     with open('C:\\Users\\Yandisa\\OneDrive - Cape IT Initiative\\Documents\\GitHub\\SquadGoals\\sign up\\datasheet.txt', 'r') as file:
+     with open('datasheet.txt', 'r') as file:
         users = file.readlines()
         for user in users:
             # Each line should contain email and hashed password separated by a comma
@@ -489,12 +504,12 @@ class App:
 
     # Token management
     def save_token(self, email, token):
-        with open('C:\\Users\\Yandisa\\OneDrive - Cape IT Initiative\\Documents\\GitHub\\SquadGoals\\sign up\\tokens.txt', 'a') as file:
+        with open('tokens.txt', 'a') as file:
             file.write(f"{email},{token},{time.time()}\n")
 
 
     def is_token_valid(self, email, token):
-        with open('C:\\Users\\Yandisa\\OneDrive - Cape IT Initiative\\Documents\\Github\\SquadGoals\\sign up\\tokens.txt', 'r') as file:
+        with open('tokens.txt', 'r') as file:
             tokens = file.readlines()
             for t in tokens:
              saved_email, saved_token, timestamp = t.strip().split(',')
