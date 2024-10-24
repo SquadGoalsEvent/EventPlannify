@@ -1,15 +1,1 @@
-zimkhitha,zimnongomaza@gmail.com,0987654321,089eb255-ced0-43f5-b781-85cb8a0e2cdb
-zizo,zimnongomaza@gmail.com,0987654326,039b889e-3910-4f25-b8c2-c39e2f7ed5d8
-zimkhitha,zimnongomaza@gmail.com,0987654321,07c3a783-06da-4069-8201-f6f8cfe6c4b5
-selelo,zimkhitha.nongomaza@capaciti.org.za,0987654321,ea21eff8-bba0-4459-b30d-fc45b187dc91
-liyema,zimkhitha.nongomaza@capaciti.org.za,0987654321,0064d64b-8560-45ba-93d7-aca0bfa2d954
-Zimkhitha,zimkhitha.nongomaza@capaciti.org.za,0987654321,83d21706-5f71-40a2-9f70-17a8b2457b06
-zimkhitha,nongomaza@gmail.com,0987654321,6d0ec6d0-5219-4953-9901-1d3973a9346a
-ntosh,zimkhitha.nongomaza@capaciti.org.za,0987654321,05fa9d87-d005-464e-8dba-9069c4a24d17
-zimkhitha,zimkhitha.nongomaza@gmail.com,0987654321,6f075b3c-7f69-4958-9964-9cf9863f6f39
-zimkhitha,zimkhitha.nongomaza@gmail.com,0987654321,a8b6689d-fa36-4859-a324-10cf2b01b230
-zimkhitha,zimkhitha.nongomaza@gmail.com,0987654321,52c0b5de-f6c3-4d90-b000-1c54ec5d3431
-zee,zimkhitha.nongomaza@gmail.com,0987654321,d705ecb8-65d7-40d9-8dbe-10ac5689a8f4
-zimkhitha,zimkhitha.nongomaza@gmail.com,0987654321,fd63a34e-abb2-419f-a6f8-4bd98c9482c5
-zimkhitha,zimkhitha.nongomaza@capaciti.org.za,0987654321,806bb30e-f9bd-4789-958c-121d422d8a87
-zimkhitha,zimkhitha.nongomaza@capaciti.org.za,0987654321,4e86e77f-38fd-43af-be48-855e5aa66f27
+
