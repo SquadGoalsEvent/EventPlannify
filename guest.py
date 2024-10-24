@@ -17,7 +17,7 @@ def open_event_list():
 
 def create_text_with_outline(canvas, x, y, text, outline_color, text_color, font_size, font_weight ):
     for offset in range (-1, 2):
-        for offset2 in range(-1,2):
+        for offset2 in range(-1, 2):
             canvas.create_text(x + offset, y + offset2, text=text, fill = outline_color, font = ('Microsoft YaHei UI Light', font_size, font_weight), anchor = 'center')
         canvas.create_text(x, y, text = text, fill = text_color, font = ('Microsoft YaHei UI Light', font_size, font_weight), anchor = 'center')
 
