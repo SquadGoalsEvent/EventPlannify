@@ -359,17 +359,29 @@ create_button_with_icon(sidebar_frame, "VIEW RSVP", view_rsvp)
 # Create tree frame widget for displaying guest list
 tree_frame = tk.Frame(main_frame, bg=primary_color) 
 tree_frame.grid(row=3, column=0, columnspan=2, sticky="nsew")  # Place treeview below inputs
+style = ttk.Style()
+style.configure("Treeview.Heading", font=("Arial", 14, "bold"), foreground="#800080")  # Change the font size, family, and color
+style.configure("Treeview", font=("Arial", 11))  # Set the font for the rows
+
 
 # Configure grid weights for responsive design
 main_frame.grid_rowconfigure(3, weight=1)  # Allow treeview to expand
 main_frame.grid_columnconfigure(0, weight=1)  # Allow left column to expand
 main_frame.grid_columnconfigure(1, weight=1)  # Allow right column to expand
 
+
+
 # Create tree view widget
 tree = ttk.Treeview(tree_frame, columns=('Name', 'Email', 'Cellphone'), show='headings')
+
+
 tree.heading("Name", text='Name')
 tree.heading("Email", text='Email')
 tree.heading("Cellphone", text='Cellphone')
+
+tree.column("Name", anchor="center", width=200)  # You can adjust the width as needed
+tree.column("Email", anchor="center", width=200)
+tree.column("Cellphone", anchor="center", width=200)
 
 # Configure scrollbar for the treeview
 scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
@@ -382,7 +394,7 @@ tree.pack(side='left', fill='both', expand=True)  # Treeview fills remaining spa
 # Make sure the sidebar and main frame are responsive
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)  # Sidebar
-root.grid_columnconfigure(1, weight=3)  # Main content
+root.grid_columnconfigure(1, weight=3,)  # Main content
 # Set the minimum size for the window
 root.minsize(400, 300)
 
