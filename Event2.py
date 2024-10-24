@@ -15,6 +15,7 @@ import requests
 
 EVENTS_FILE = 'events.txt'
 
+
 class Event:
     def __init__(self, root):
         self.root = root
@@ -44,6 +45,7 @@ def load_background(main_content, image_path):
         messagebox.showerror("Error", f"Image file not found: {image_path}")
         return None
 
+<<<<<<< Updated upstream
 
 
 def signin(username, password):
@@ -53,12 +55,56 @@ def signin(username, password):
         # if username and password:  # Simplified check
             welcome_label.config(text=f"Welcome, {username}")
         # display_events()  
+=======
+# def logout():
+#     response = messagebox.askyesno("Logout", "Are you sure you want to logout?", font=('Microsoft YaHei UI Light', 20))
+#     if response:
+#         show_signin()
+# Assuming welcome_label is defined globally or passed as an argument
 
-# def signin():
-#     # Read the username from the text file
-#     with open('EventPlannify/datasheet.txt', 'r') as file:
-#         username = file.readline().strip()  
-#         welcome_label.config(text=f"Welcome, {username}")    
+>>>>>>> Stashed changes
+
+def load_usernames():
+    try:
+        with open('usernames.txt', 'r') as file:
+            return [line.strip() for line in file.readlines()]
+    except FileNotFoundError:
+        return []
+
+# def signin(username_entry, password_entry):
+#     username = username_entry.get()
+#     password = password_entry.get()
+
+#     # Load usernames from the new file
+#     usernames = load_usernames()
+
+#     # You can use your existing logic for password verification, for example from 'datasheet.txt'
+#     try:
+#         with open('datasheet.txt', 'r') as file:
+#             users = file.readlines()
+
+#         for users in users[1]:
+#             stored_username, stored_password = users.strip().split(',')
+#             if username == stored_username and password == stored_password:
+#                 if username in usernames:
+#                     welcome_label.config(text=f"Welcome, {username}")
+#                     display_events() 
+#                 else:
+#                     messagebox.showerror("Login Failed", "Username not found.")
+#                 return
+
+#         messagebox.showerror("Login Failed", "Invalid username or password.")
+
+#     except FileNotFoundError:
+#         messagebox.showerror("Error", "User data file not found.")
+#     except Exception as e:
+#         messagebox.showerror("Error", str(e))
+
+# # def signin():
+# #     # Read the username from the text file
+# #     with open('events.txt', 'r') as file:
+# #         username = file.readline().strip()  
+# #         welcome_label.config(text=f"Welcome, {username}")    
 
 
 def load_events():
@@ -318,7 +364,13 @@ root.config(bg="#d3d3d3")
 top_frame = tk.Frame(root, bg="#800080", height=50)
 top_frame.place(relx=0.0, rely=0.0, relwidth=1, relheight=0.1)
 
+<<<<<<< Updated upstream
 
+=======
+# Create the logout button
+# logout_button = tk.Button(top_frame, text="Logout", command=logout, bg="#800080", fg="white")
+# logout_button.pack(side="right", padx=10)
+>>>>>>> Stashed changes
 
 # Create the sidebar frame
 sidebar_frame = tk.Frame(root, bg="#800080", width=150)
@@ -333,16 +385,25 @@ sidebar_frame.place(relx=0.0, rely=0.1, relheight=0.9, relwidth=0.25)
 # icon_label.pack(pady=10) 
 
 # Create the welcome label under the icon
-welcome_label = tk.Label(sidebar_frame, text="Welcome, [User's Name]", bg="#800080", fg="white", font=("Microsoft YaHei UI Light", 20))
-welcome_label.pack(pady=15) 
+welcome_label = tk.Label(sidebar_frame, text="Event plannify", bg="#800080", fg="white", font=("Microsoft YaHei UI Light", 20))
+welcome_label.pack(pady=25) 
 
 # Load profile icon
+<<<<<<< Updated upstream
 img = Image.open("user.png")
 resized_img = img.resize((50, 50), Image.LANCZOS)
 photo_img = ImageTk.PhotoImage(resized_img)
 root.profile_icon = photo_img
 profile_icon_label = tk.Label(sidebar_frame, image=root.profile_icon, bg="#800080")
 profile_icon_label.pack(pady=20)
+=======
+# img = Image.open("user.png")
+# resized_img = img.resize((50, 50), Image.LANCZOS)
+# photo_img = ImageTk.PhotoImage(resized_img)
+# root.profile_icon = photo_img
+# profile_icon_label = tk.Label(sidebar_frame, image=root.profile_icon, bg="#800080")
+# profile_icon_label.pack(pady=20)
+>>>>>>> Stashed changes
 
 
 # Load icons for buttons
