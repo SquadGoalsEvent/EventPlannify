@@ -45,7 +45,6 @@ def load_background(main_content, image_path):
         messagebox.showerror("Error", f"Image file not found: {image_path}")
         return None
 
-<<<<<<< Updated upstream
 
 
 def signin(username, password):
@@ -55,14 +54,6 @@ def signin(username, password):
         # if username and password:  # Simplified check
             welcome_label.config(text=f"Welcome, {username}")
         # display_events()  
-=======
-# def logout():
-#     response = messagebox.askyesno("Logout", "Are you sure you want to logout?", font=('Microsoft YaHei UI Light', 20))
-#     if response:
-#         show_signin()
-# Assuming welcome_label is defined globally or passed as an argument
-
->>>>>>> Stashed changes
 
 def load_usernames():
     try:
@@ -364,13 +355,6 @@ root.config(bg="#d3d3d3")
 top_frame = tk.Frame(root, bg="#800080", height=50)
 top_frame.place(relx=0.0, rely=0.0, relwidth=1, relheight=0.1)
 
-<<<<<<< Updated upstream
-
-=======
-# Create the logout button
-# logout_button = tk.Button(top_frame, text="Logout", command=logout, bg="#800080", fg="white")
-# logout_button.pack(side="right", padx=10)
->>>>>>> Stashed changes
 
 # Create the sidebar frame
 sidebar_frame = tk.Frame(root, bg="#800080", width=150)
@@ -389,21 +373,7 @@ welcome_label = tk.Label(sidebar_frame, text="Event plannify", bg="#800080", fg=
 welcome_label.pack(pady=25) 
 
 # Load profile icon
-<<<<<<< Updated upstream
-img = Image.open("user.png")
-resized_img = img.resize((50, 50), Image.LANCZOS)
-photo_img = ImageTk.PhotoImage(resized_img)
-root.profile_icon = photo_img
-profile_icon_label = tk.Label(sidebar_frame, image=root.profile_icon, bg="#800080")
-profile_icon_label.pack(pady=20)
-=======
-# img = Image.open("user.png")
-# resized_img = img.resize((50, 50), Image.LANCZOS)
-# photo_img = ImageTk.PhotoImage(resized_img)
-# root.profile_icon = photo_img
-# profile_icon_label = tk.Label(sidebar_frame, image=root.profile_icon, bg="#800080")
-# profile_icon_label.pack(pady=20)
->>>>>>> Stashed changes
+
 
 
 # Load icons for buttons
