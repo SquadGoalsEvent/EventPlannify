@@ -15,7 +15,8 @@ import requests
 
 EVENTS_FILE = 'events.txt'
 
-def __init__(self, root):
+class Event:
+    def __init__(self, root):
         self.root = root
         self.root.title("Event Manager")
         self.root.geometry("1500x800")
@@ -46,13 +47,21 @@ def load_background(main_content, image_path):
 def logout():
     response = messagebox.askyesno("Logout", "Are you sure you want to logout?", font=('Microsoft YaHei UI Light', 20))
     if response:
-        root.quit()
+        show_signin()
 
-def login():
-    # Read the username from the text file
-    with open('EventPlannify/datasheet.txt', 'r') as file:
-        username = file.readline().strip()  
-        welcome_label.config(text=f"Welcome, {username}")    
+def signin(username, password):
+    # Add your login logic here
+     with open('EventPlannify/datasheet.txt', 'r') as file:
+            username = file.readline().strip()  
+        # if username and password:  # Simplified check
+            welcome_label.config(text=f"Welcome, {username}")
+        # display_events()  
+
+# def signin():
+#     # Read the username from the text file
+#     with open('EventPlannify/datasheet.txt', 'r') as file:
+#         username = file.readline().strip()  
+#         welcome_label.config(text=f"Welcome, {username}")    
 
 
 def load_events():
@@ -68,7 +77,7 @@ def display_events():
     for widget in main_content.winfo_children():
         widget.destroy()
 
-    overlay_frame = load_background(main_content, "pexels-designecologist-2526105.png")
+    overlay_frame = load_background(main_content, "EventPlannify/pexels-designecologist-2526105.png")
     if overlay_frame is None:
         return
 
@@ -333,7 +342,7 @@ welcome_label = tk.Label(sidebar_frame, text="Welcome, [User's Name]", bg="#8000
 welcome_label.pack(pady=15) 
 
 # Load profile icon
-img = Image.open("user.png ")
+img = Image.open("EventPlannify/user.png")
 resized_img = img.resize((50, 50), Image.LANCZOS)
 photo_img = ImageTk.PhotoImage(resized_img)
 root.profile_icon = photo_img
@@ -343,19 +352,19 @@ profile_icon_label.pack(pady=20)
 
 # Load icons for buttons
 # Load icons for buttons
-create_events_icon = Image.open("calendar (1).png")
+create_events_icon = Image.open("EventPlannify/calendar (1).png")
 create_events_icon = create_events_icon.resize((20, 20), Image.LANCZOS)
 create_events_photo = ImageTk.PhotoImage(create_events_icon)
 
-guest_list_icon = Image.open("guest-list.png")
+guest_list_icon = Image.open("EventPlannify/guest-list.png")
 guest_list_icon = guest_list_icon.resize((20, 20), Image.LANCZOS)
 guest_list_photo = ImageTk.PhotoImage(guest_list_icon)
 
-view_guest_icon = Image.open("target-audience.png")
+view_guest_icon = Image.open("EventPlannify/target-audience.png")
 view_guest_icon = view_guest_icon.resize((20, 20), Image.LANCZOS)
 view_guest_photo = ImageTk.PhotoImage(view_guest_icon)
 
-settings_icon = Image.open("cog.png")
+settings_icon = Image.open("EventPlannify/cog.png")
 settings_icon = settings_icon.resize((20, 20), Image.LANCZOS)
 setting_photo = ImageTk.PhotoImage(view_guest_icon)
 
@@ -366,8 +375,8 @@ def create_button_with_icon(frame, text, command, icon):
 
 # Create buttons with icons
 create_button_with_icon(sidebar_frame, "Create Events", show_create_event_form, create_events_photo)
-create_button_with_icon(sidebar_frame, "Guest List", show_create_guest_form, guest_list_photo)
-create_button_with_icon(sidebar_frame, "View Guests", show_view_guest_list_form, view_guest_photo)
+create_button_with_icon(sidebar_frame, "Edit Events", show_create_guest_form, guest_list_photo)
+create_button_with_icon(sidebar_frame, "Delete Events", show_view_guest_list_form, view_guest_photo)
 create_button_with_icon(sidebar_frame, "View Event List", show_view_guest_list_form, view_guest_photo)
 # create_button_with_icon(sidebar_frame, "settings",show_view_guest_list_form, setting_photo)
 
@@ -390,6 +399,6 @@ main_content.place(relx=0.25, rely=0.1, relwidth=0.85, relheight=0.9)
 
 
 display_events()
-login()
+# signin()
 
 root.mainloop()
