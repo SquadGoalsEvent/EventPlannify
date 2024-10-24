@@ -519,8 +519,14 @@ class App:
                         messagebox.showinfo("Success", f"Welcome {saved_username}! Login successful!")
                         self.hide_loading_spinner()
                         self.enable_buttons()
-                        return
                         
+                        self.master.destroy()
+                        root = Tk()
+                        app = EventsApplication(root)
+                        root.mainloop()
+
+                        return
+            
                     else:
                         messagebox.showerror("Error", "Incorrect Password! Please try again.")
                         self.hide_loading_spinner()
@@ -529,10 +535,7 @@ class App:
                         return
             except ValueError:
                 print(f"Error processing line: {user}")
-     self.master.destroy()
-     root = Tk()
-     app = EventApp(root)
-     root.mainloop()
+     
     # If no matching email is found
     messagebox.showerror("Error", "Invalid credentials!")
 
