@@ -517,7 +517,7 @@ class App:
                 if saved_email == email:
                     # Validate the password using bcrypt
                     if bcrypt.checkpw(password.encode('utf-8'), saved_hashed_password.encode('utf-8')):
-                        subprocess.Popen(['python', 'guest.py', saved_username])
+                        subprocess.Popen(['python', 'Event2.py', saved_username])
                         quit()
                         return
                         
