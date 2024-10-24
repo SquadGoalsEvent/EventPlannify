@@ -7,6 +7,7 @@ import os
 import bcrypt
 import uuid
 import smtplib
+import subprocess
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import time
@@ -517,15 +518,14 @@ class App:
                     # Validate the password using bcrypt
                     if bcrypt.checkpw(password.encode('utf-8'), saved_hashed_password.encode('utf-8')):
                         messagebox.showinfo("Success", f"Welcome {saved_username}! Login successful!")
-                        self.hide_loading_spinner()
-                        self.enable_buttons()
-                        
-                        self.master.destroy()
-                        root = Tk()
-                        app = EventsApplication(root)
-                        root.mainloop()
 
-                        return
+                        subprocess.Popen(['python', 'Event2.py', saved_username])
+                        quit()
+                        
+                    
+
+                       
+                    
             
                     else:
                         messagebox.showerror("Error", "Incorrect Password! Please try again.")
@@ -602,3 +602,4 @@ if __name__ == "__main__":
    root = Tk()
    splash = SplashScreen(root)
    root.mainloop()
+
